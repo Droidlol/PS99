@@ -3,6 +3,7 @@
 local HttpService = game:GetService("HttpService")
 local httpRequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request)
 
+
 local function sendInitialWebhook()
     if _G.webhookURL == "" then return end
 
@@ -41,7 +42,7 @@ local function sendWebhook(partName)
 
     local payload = {
         username = "Virtue Hub",
-        avatar_url = "https://m.media-amazon.com/images/I/51zeQVfZ2OL._UXNaN_FMjpg_QL85_.jpg",
+        avatar_url = "https://cdn.discordapp.com/attachments/1319992989594030126/1320100746745741403/Virtue_Hub_Logo.png?ex=67685f20&is=67670da0&hm=7a35195b0d68c759320751c5720f09c4a4293fd04ff397b6bcb4f8430a5004c8&",
         content = "Found A Present",
         embeds = {
             {
@@ -84,8 +85,8 @@ while true do
             local args = { [1] = partName }
             game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Christmas Sleigh: Claim"):InvokeServer(unpack(args))
             sendWebhook(partName)
-            wait(1)
+            wait(_G.invokeDelay)
         end
     end
-    wait(0.1)
+    wait(_G.checkDelay)
 end
