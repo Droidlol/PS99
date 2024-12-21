@@ -2,6 +2,8 @@
 local HttpService = game:GetService("HttpService")
 local httpRequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request)
 
+_G.webhookURL = _G.webhookURL or ""
+
 local function sendWebhook(partName)
     if _G.webhookURL == "" then return end
 
@@ -36,7 +38,12 @@ end
 
 while true do
     for _, part in pairs(game.Workspace:GetDescendants()) do
-        if part:FindFirstChild("ClickDetector") or part:FindFirstChild("Particles") then
+        if part:FindFirstChild("ClickDetector") and 
+           part:FindFirstChild("Particles") and 
+           part:FindFirstChild("AlignOrientation") and 
+           part:FindFirstChild("Attachment") and 
+           part:FindFirstChild("ParticleEmitter") then
+            
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = part.CFrame
             local partName = part.Name
             local args = { [1] = partName }
@@ -47,3 +54,4 @@ while true do
     end
     wait(0.1)
 end
+
