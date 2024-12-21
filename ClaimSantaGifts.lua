@@ -100,12 +100,17 @@ while true do
            part:FindFirstChild("Attachment") and 
            part:FindFirstChild("ParticleEmitter") then
             
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = part.CFrame
             local partName = part.Name
-            local args = { [1] = partName }
-            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Christmas Sleigh: Claim"):InvokeServer(unpack(args))
-            sendWebhook(partName)
-            wait(_G.invokeDelay)
+
+            if not claimedParts[partName] then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = part.CFrame
+                local args = { [1] = partName }
+                game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Christmas Sleigh: Claim"):InvokeServer(unpack(args))
+                claimedParts[partName] = true
+                sendWebhook(partName)
+                part:Destroy()
+                wait(_G.invokeDelay)
+            end
         end
     end
     wait(_G.checkDelay)
