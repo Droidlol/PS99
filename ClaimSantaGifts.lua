@@ -1,14 +1,46 @@
--- made by pq3e on discord
+-- made by discord.gg/virtuehub
+
 local HttpService = game:GetService("HttpService")
 local httpRequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request)
 
-_G.webhookURL = _G.webhookURL or ""
+local function sendInitialWebhook()
+    if _G.webhookURL == "" then return end
+
+    local payload = {
+        username = "Virtue Hub",
+        avatar_url = "https://cdn.discordapp.com/attachments/1319992989594030126/1320100746745741403/Virtue_Hub_Logo.png?ex=67685f20&is=67670da0&hm=7a35195b0d68c759320751c5720f09c4a4293fd04ff397b6bcb4f8430a5004c8&",
+        content = "",
+        embeds = {
+            {
+                title = "Script Initialized",
+                type = "rich",
+                color = 65280,
+                fields = {
+                    { name = "Author", value = "This script was made by Destiny (pq3e)", inline = false },
+                    { name = "More Scripts", value = "[Join VirtueHub](https://discord.gg/virtuehub)", inline = false }
+                },
+                footer = { text = "Enjoy using the script!", icon_url = "https://cdn.discordapp.com/attachments/1319992989594030126/1320100746745741403/Virtue_Hub_Logo.png?ex=67685f20&is=67670da0&hm=7a35195b0d68c759320751c5720f09c4a4293fd04ff397b6bcb4f8430a5004c8&" }
+            }
+        }
+    }
+
+    local response = httpRequest({
+        Url = _G.webhookURL,
+        Method = "POST",
+        Headers = { ["Content-Type"] = "application/json" },
+        Body = HttpService:JSONEncode(payload)
+    })
+
+    if not response or not response.Success then
+        warn("Initial webhook failed")
+    end
+end
 
 local function sendWebhook(partName)
     if _G.webhookURL == "" then return end
 
     local payload = {
-        username = "Nigger Claimer",
+        username = "Virtue Hub",
         avatar_url = "https://m.media-amazon.com/images/I/51zeQVfZ2OL._UXNaN_FMjpg_QL85_.jpg",
         content = "Found A Present",
         embeds = {
@@ -17,9 +49,10 @@ local function sendWebhook(partName)
                 type = "rich",
                 color = 1127128,
                 fields = {
-                    { name = "Present Name: ", value = partName, inline = false }
+                    { name = "Present Name: ", value = partName, inline = false },
+                    { name = "More Scripts", value = "[Join VirtueHub](https://discord.gg/virtuehub)", inline = false }
                 },
-                footer = { text = "Nigger Claimer", icon_url = "https://m.media-amazon.com/images/I/51zeQVfZ2OL._UXNaN_FMjpg_QL85_.jpg" }
+                footer = { text = "Thanks For Using Virtue Hub", icon_url = "https://cdn.discordapp.com/attachments/1319992989594030126/1320100746745741403/Virtue_Hub_Logo.png?ex=67685f20&is=67670da0&hm=7a35195b0d68c759320751c5720f09c4a4293fd04ff397b6bcb4f8430a5004c8&" }
             }
         }
     }
@@ -35,6 +68,8 @@ local function sendWebhook(partName)
         warn("Webhook failed")
     end
 end
+
+sendInitialWebhook()
 
 while true do
     for _, part in pairs(game.Workspace:GetDescendants()) do
@@ -54,4 +89,3 @@ while true do
     end
     wait(0.1)
 end
-
