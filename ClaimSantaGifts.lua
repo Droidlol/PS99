@@ -16,6 +16,20 @@ local changedeventdoor = eventdoor + (eventdoor.LookVector * changeddistance)
 
 local claimedParts = {}
 
+-- Functions
+
+local function antiAfk()
+    local vu = game:GetService("VirtualUser")
+    while true do
+        game:GetService("Players").LocalPlayer.Idled:Connect(function()
+            vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+            task.wait(1)
+            vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+        end)
+        task.wait(_G.antiAfkInterval)
+    end
+end
+
 
 local function sendInitialWebhook()
     if _G.webhookURL == "" then return end
@@ -83,6 +97,7 @@ local function sendWebhook(partName)
     end
 end
 
+coroutine.wrap(antiAfk)()
 sendInitialWebhook()
 
 if character and _G.tptoeventdoor then
