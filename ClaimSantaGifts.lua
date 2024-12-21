@@ -50,18 +50,18 @@ local function sendInitialWebhook()
     end
 end
 
-local function sendWebhook(partName, status)
+local function sendWebhook(partName)
     if _G.webhookURL == "" then return end
 
     local payload = {
         username = "Virtue Hub",
         avatar_url = "https://cdn.discordapp.com/attachments/1319992989594030126/1320100746745741403/Virtue_Hub_Logo.png?ex=67685f20&is=67670da0&hm=7a35195b0d68c759320751c5720f09c4a4293fd04ff397b6bcb4f8430a5004c8&",
-        content = status == "claimed" and "Found A Present" or "Present Already Claimed",
+        content = "Found A Present",
         embeds = {
             {
-                title = status == "claimed" and "Claimed A Present" or "Skipped Duplicate Present",
+                title = "Claimed A Present",
                 type = "rich",
-                color = status == "claimed" and 1127128 or 16711680,
+                color = 1127128,
                 fields = {
                     { name = "Present Name: ", value = partName, inline = false },
                     { name = "More Scripts", value = "[Join VirtueHub](https://discord.gg/virtuehub)", inline = false }
@@ -99,15 +99,13 @@ while true do
            part:FindFirstChild("AlignOrientation") and 
            part:FindFirstChild("Attachment") and 
            part:FindFirstChild("ParticleEmitter") then
-            
-            local partName = part.Name
 
-            if not claimedParts[partName] then
+            if not claimedParts[part] then
+                claimedParts[part] = true
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = part.CFrame
-                local args = { [1] = partName }
+                local args = { [1] = part.Name }
                 game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Christmas Sleigh: Claim"):InvokeServer(unpack(args))
-                claimedParts[partName] = true
-                sendWebhook(partName)
+                sendWebhook(part.Name)
                 part:Destroy()
                 wait(_G.invokeDelay)
             end
